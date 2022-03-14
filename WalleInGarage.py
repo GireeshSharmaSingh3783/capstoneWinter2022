@@ -181,7 +181,7 @@ class Hello5Program:
                 print("Temperature : ", temperature, "C")
                 print("Pressure : ", press, "hPa")
                 
-                url= "https://safesmarthome-cdf48-default-rtdb.firebaseio.com/.json"
+                url= "https://safesmarthome-cdf48-default-"
                 data = {
                     "BME":{
                     "Temp": temperature,
@@ -247,7 +247,7 @@ class Hello2Program:
                distance = round(pulse_duration * 17150, 2)
                print ("Distance:",distance,"cm")
                
-               url= "https://safesmarthome-cdf48-default-rtdb.firebaseio.com/secureID0.json"
+               url= "https://safesmarthome-cdf48-defau"
                
                data = distance
                headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
