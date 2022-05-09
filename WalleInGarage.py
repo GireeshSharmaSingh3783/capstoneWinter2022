@@ -4,18 +4,36 @@ from threading import Thread
 import time
 import RPi.GPIO as GPIO
 import smbus
-#import firebase
+import firebase
 import json
-#import pyrebase
+import pyrebase
 import requests
 import sys
 import os
 from ctypes import c_short
 from ctypes import c_byte
 from ctypes import c_ubyte
+from time import sleep
 
 global cycle
 cycle = 0.0
+
+firebaseConfig = {
+
+    "apiKey": "AIzaSyA7nzwptB5GinyiP1kN38stJb6a582XSAg",
+    "authDomain": "safesmarthome-cdf48.firebaseapp.com",
+    "databaseURL": "https://safesmarthome-cdf48-default-rtdb.firebaseio.com",
+    "projectId": "safesmarthome-cdf48",
+    "storageBucket": "safesmarthome-cdf48.appspot.com",
+    "messagingSenderId": "1070167024838",
+    "appId": "1:1070167024838:web:405f0f6f643a405884a3c7",
+    "measurementId": "G-TXXLRBVTNB"
+};
+
+firebase=pyrebase.initialize_app(firebaseConfig)
+
+db=firebase.database()
+
 
 class Hello5Program:
     def __init__(self):
@@ -180,18 +198,23 @@ class Hello5Program:
                 
                 print("Temperature : ", temperature, "C")
                 print("Pressure : ", press, "hPa")
-                
-                url= "https://safesmarthome-cdf48-default-"
-                data = {
-                    "BME":{
-                    "Temp": temperature,
-                    "Pressure": press
-                    }
-                    }
-                #tem = temperature
-                headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-                r = requests.post(url, data=json.dumps(data), headers=headers)
+                db.child("BMP280Temp").update({"Temp": temperature})
+                db.child("BMP280Pressure").update({"Pressure": press})
+                #     
 
+                
+                
+#                 url= "https://safesmarthome-cdf48-default-rtdb.firebaseio.com/.json"
+#                 data = {
+#                     "BME":{
+#                     "Temp": temperature,
+#                     "Pressure": press
+#                     }
+#                     }
+#                 #tem = temperature
+#                 headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+#                 r = requests.post(url, data=json.dumps(data), headers=headers)
+# 
             time.sleep(3.000)
 
             if __name__=="__main__":
@@ -246,13 +269,13 @@ class Hello2Program:
                pulse_duration = pulse_end_time - pulse_start_time
                distance = round(pulse_duration * 17150, 2)
                print ("Distance:",distance,"cm")
-               
-               url= "https://safesmarthome-cdf48-defau"
-               
-               data = distance
-               headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-               r = requests.post(url, data=json.dumps(data), headers=headers)
-               
+               db.child("DistanceSensor").update({"Distance":distance})
+#                url= "https://safesmarthome-cdf48-default-rtdb.firebaseio.com/secureID0.json"
+#                
+#                data = distance
+#                headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+#                r = requests.post(url, data=json.dumps(data), headers=headers)
+#                
                time.sleep(0.055)
             
             finally:
